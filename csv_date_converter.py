@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 def rchop(s, suffix):
     if suffix and s.endswith(suffix):
         return s[:-len(suffix)]
@@ -9,12 +8,12 @@ def rchop(s, suffix):
 def main():
     path = "./SAP_GL_ITEM_Adjustments_2017-2022.csv"
     date_columns = ["DATE_PERIOD", "POSTING_DATE", "DOCUMENT_DATE"]
-
+    original_format = "%d/%m/%Y"
+    # file read
     df = pd.read_csv(path)
-
-    for col in date_columns:
-        df[col] = pd.to_datetime(df[col], format="%d/%m/%Y")
-
+    # transform
+    df[date_columns] = df[date_columns].apply(lambda col: pd.to_datetime(col, format=original_format))
+    # load
     df.to_csv(rchop(path, ".csv") + "converted.csv")
 
 if __name__ == "__main__":
